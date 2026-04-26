@@ -242,7 +242,7 @@ const enhancedMenuData = {
         popular: true,
         allergens: ["Gluten", "Eggs"],
         dietary: [],
-        image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800",
+        image: "/src/assets/chicken-kottu.png",
         prepTime: "12 min",
         servingSize: "1 portion",
         calories: 480,
