@@ -48,7 +48,7 @@ export default function LuxuryRestaurantPage() {
             transition={{ duration: 1 }}
           >
             <p className="text-luxury-gold text-sm tracking-[0.3em] uppercase mb-4">Our Story</p>
-            <h1 className="font-serif text-6xl md:text-7xl text-white mb-6">Queen Nature Resort</h1>
+            <h1 className="font-serif text-6xl md:text-7xl text-white mb-6">Sueen Nature Resort</h1>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-white/90">
               <div className="flex items-center gap-2">
                 <Star className="w-6 h-6 text-luxury-gold fill-luxury-gold" />
@@ -76,7 +76,7 @@ export default function LuxuryRestaurantPage() {
               </h2>
               <div className="space-y-6 text-luxury-charcoal leading-relaxed">
                 <p className="text-lg font-light">
-                  Experience world-class buffet dining at Queen Nature Resort. Our extensive buffet features authentic Sri Lankan cuisine, international favorites, and live cooking stations.
+                  Experience world-class buffet dining at Sueen Nature Resort. Our extensive buffet features authentic Sri Lankan cuisine, international favorites, and live cooking stations.
                 </p>
                 <p className="font-light">
                   With our innovative virtual queue system, you can enjoy premium dining without the hassle of physical waiting lines. Book in advance or join the queue remotely and receive real-time updates.

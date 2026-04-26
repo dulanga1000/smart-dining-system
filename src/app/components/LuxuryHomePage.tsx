@@ -93,7 +93,7 @@ export default function LuxuryHomePage() {
               </div>
               <div className="space-y-6 text-luxury-charcoal leading-relaxed">
                 <p className="text-lg font-light">
-                  Nestled in the heart of Sri Lanka's most breathtaking landscapes, Queen Nature Resort represents the pinnacle of luxury dining and hospitality.
+                  Nestled in the heart of Sri Lanka's most breathtaking landscapes, Sueen Nature Resort represents the pinnacle of luxury dining and hospitality.
                 </p>
                 <p className="font-light">
                   For over a decade, we have curated exceptional experiences that blend authentic Sri Lankan cuisine with international sophistication.

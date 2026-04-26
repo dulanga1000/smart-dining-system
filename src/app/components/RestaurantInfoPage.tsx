@@ -49,7 +49,7 @@ export default function RestaurantInfoPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
           </div>
           <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6">Queen Nature Resort</h1>
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6">Sueen Nature Resort</h1>
             <div className="flex items-center gap-6 text-white/90 text-lg">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                 <Star className="w-6 h-6 text-gold fill-gold" />

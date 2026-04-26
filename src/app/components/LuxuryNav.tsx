@@ -10,7 +10,7 @@ export default function LuxuryNav() {
       <div className="container mx-auto px-8 py-6">
         <div className="flex items-center justify-between">
           <Link to="/" className="group block">
-            <img src={logo} alt="Queen Nature Resort & Dining" className="h-14 w-auto object-contain" />
+            <img src={logo} alt="Sueen Nature Resort & Dining" className="h-14 w-auto object-contain" />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

@@ -131,7 +131,7 @@ export default function GalleryPage() {
             <p className="text-luxury-gold text-sm tracking-[0.3em] uppercase mb-4">Visual Journey</p>
             <h1 className="font-serif text-6xl md:text-7xl text-white mb-6">Photo Gallery</h1>
             <p className="text-white/80 text-lg max-w-2xl mx-auto font-light">
-              Experience the luxury and elegance of Queen Nature Resort
+              Experience the luxury and elegance of Sueen Nature Resort
             </p>
           </motion.div>
         </div>

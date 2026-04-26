@@ -11,7 +11,7 @@ export default function HomePage() {
           <div className="inline-block px-6 py-2 bg-gold rounded-full mb-4">
             <span className="text-sm font-semibold tracking-wide">LUXURY DINING EXPERIENCE</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Queen Nature Resort</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">Sueen Nature Resort</h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl">Experience World-Class Buffet Without the Wait</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/menu" className="px-8 py-4 bg-gold hover:bg-gold/90 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl">
@@ -147,7 +147,7 @@ export default function HomePage() {
                   <MapPin className="w-5 h-5 text-gold mt-1" />
                   <div>
                     <p className="font-semibold">Location</p>
-                    <p className="text-gray-300">Queen Nature Resort, Kandy Road</p>
+                    <p className="text-gray-300">Sueen Nature Resort, Kandy Road</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
