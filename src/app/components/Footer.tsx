@@ -19,7 +19,6 @@ export default function Footer() {
               />
               <div>
                 <h3 className="text-xl font-bold tracking-wide">Sueen Nature</h3>
-                <p className="text-xs uppercase tracking-[0.25em] text-gold/90">Resort and Dining</p>
               </div>
             </div>
             <p className="text-white/80 text-sm leading-relaxed mb-4">
