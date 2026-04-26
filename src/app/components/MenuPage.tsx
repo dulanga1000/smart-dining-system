@@ -4,6 +4,25 @@ import { Link } from 'react-router';
 import Navigation from './Navigation';
 import Footer from './Footer';
 
+type MealType = 'breakfast' | 'lunch' | 'dinner';
+
+interface MenuItem {
+  name: string;
+  description: string;
+  category: string;
+  isVeg: boolean;
+  popular?: boolean;
+  allergens?: string[];
+  dietary?: string[];
+}
+
+interface MenuSection {
+  title: string;
+  time: string;
+  color: string;
+  items: MenuItem[];
+}
+
 function getMenuItemImage(name: string): string {
   const item = name.toLowerCase();
 
@@ -68,7 +87,7 @@ function getMenuItemImage(name: string): string {
   return 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=90';
 }
 
-const menuData = {
+const menuData: Record<MealType, MenuSection> = {
   breakfast: {
     title: "Breakfast Buffet",
     time: "6:30 AM - 10:30 AM",
@@ -125,7 +144,7 @@ const menuData = {
 };
 
 export default function MenuPage() {
-  const [selectedMeal, setSelectedMeal] = useState<'breakfast' | 'lunch' | 'dinner'>('breakfast');
+  const [selectedMeal, setSelectedMeal] = useState<MealType>('breakfast');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterVeg, setFilterVeg] = useState(false);
   const [filterVegan, setFilterVegan] = useState(false);
