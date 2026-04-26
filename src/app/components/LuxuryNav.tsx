@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import logo from '../../assets/logo.png';
 
 export default function LuxuryNav() {
   const { totalItems } = useCart();
@@ -8,9 +9,8 @@ export default function LuxuryNav() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-luxury-gold/20 shadow-sm">
       <div className="container mx-auto px-8 py-6">
         <div className="flex items-center justify-between">
-          <Link to="/" className="group">
-            <h1 className="font-serif text-2xl tracking-tight text-luxury-charcoal">Queen Nature</h1>
-            <p className="text-xs tracking-[0.2em] uppercase text-luxury-gold">Resort & Dining</p>
+          <Link to="/" className="group block">
+            <img src={logo} alt="Queen Nature Resort & Dining" className="h-14 w-auto object-contain" />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

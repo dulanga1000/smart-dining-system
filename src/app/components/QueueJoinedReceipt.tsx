@@ -11,15 +11,26 @@ interface QueueJoinedReceiptProps {
 }
 
 const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, name, phone, joinTime }) => {
+  const businessName = 'Sueen Nature';
+  const businessAddress = 'Sueen Baduraliya, Sri Lanka';
+  const businessContact = '+94 77 123 4567';
+
   // Print handler
-  const handlePrint = () => {
+  const handlePrint = async () => {
     const printWindow = window.open('', '_blank', 'width=400,height=600');
     if (!printWindow) return;
+
+    let qrDataUrl = '';
+    try {
+      qrDataUrl = await QRCode.toDataURL(`QUEUE:${queueNumber}`, { width: 180, margin: 1 });
+    } catch {
+      qrDataUrl = '';
+    }
 
     printWindow.document.write(`
       <html>
         <head>
-          <title>Queue Ticket #${queueNumber}</title>
+          <title>Queue Receipt #${queueNumber}</title>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
             body { 
@@ -42,12 +53,12 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
         </head>
         <body>
           <div class="header">
-            <div class="logo">Smart Dining</div>
-            <div class="sub">Premium Restaurant Experience</div>
-            <div class="sub">123 Culinary Hub, Colombo</div>
+            <div class="logo">${businessName}</div>
+            <div class="sub">${businessAddress}</div>
+            <div class="sub">Contact: ${businessContact}</div>
           </div>
           <div class="divider"></div>
-          <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">QUEUE TICKET</div>
+          <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">QUEUE RECEIPT</div>
           <div class="big-ticket">#${queueNumber}</div>
           <div class="divider"></div>
           <div class="row"><span>Name:</span><span>${name}</span></div>
@@ -55,7 +66,7 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
           <div class="row"><span>Time:</span><span>${joinTime}</span></div>
           <div class="divider"></div>
           <div class="qr">
-            <img src="${document.querySelector('canvas')?.toDataURL() || ''}" alt="QR Code" />
+            <img src="${qrDataUrl}" alt="QR Code" />
           </div>
           <div class="footer">
             Please present this ticket when called.<br/>
@@ -76,7 +87,7 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
   // Download handler
   const handleDownload = async () => {
     // Thermal receipt style width 80mm
-    const doc = new jsPDF({ unit: 'mm', format: [80, 150] });
+    const doc = new jsPDF({ unit: 'mm', format: [80, 220] });
     const width = doc.internal.pageSize.getWidth();
     let y = 15;
 
@@ -87,18 +98,18 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
       doc.text(text, (width - textWidth) / 2, yPos);
     };
 
-    centerText('SMART DINING', y, 16, true);
+    centerText(businessName.toUpperCase(), y, 14, true);
     y += 6;
-    centerText('Premium Restaurant Experience', y, 8);
+    centerText(businessAddress, y, 8);
     y += 4;
-    centerText('123 Culinary Hub, Colombo', y, 8);
+    centerText(`Contact: ${businessContact}`, y, 8);
 
     y += 8;
     doc.setLineDashPattern([1, 1], 0);
     doc.line(5, y, width - 5, y);
     y += 8;
 
-    centerText('QUEUE TICKET', y, 10, true);
+    centerText('QUEUE RECEIPT', y, 10, true);
     y += 12;
     centerText(`#${queueNumber}`, y, 24, true);
     y += 10;
@@ -136,7 +147,7 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
     y += 4;
     centerText('when called. Thank you!', y, 8);
 
-    doc.save(`Queue_Ticket_${queueNumber}.pdf`);
+    doc.save(`Queue_Receipt_${queueNumber}.pdf`);
   };
 
   return (

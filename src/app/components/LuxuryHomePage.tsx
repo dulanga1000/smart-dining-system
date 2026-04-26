@@ -6,6 +6,8 @@ import LuxuryFooter from './LuxuryFooter';
 import chickenKottuImage from '../../assets/Chicken_Kottu.jpg';
 
 export default function LuxuryHomePage() {
+  const googleMapsLocationUrl = 'https://google.com/maps?q=H735+X64+Sueen+Nature,+Baduraliya&ftid=0x3ae3cf3ce1cc4b5b:0xcf5359e7f62b0adc&entry=gps&shh=CAE&lucs=,94297699,94284463,94231188,94280568,47071704,94218641,94282134,94286869&g_ep=CAISEjI2LjE2LjAuODk4OTU0MjE1MBgAIIgnKkgsOTQyOTc2OTksOTQyODQ0NjMsOTQyMzExODgsOTQyODA1NjgsNDcwNzE3MDQsOTQyMTg2NDEsOTQyODIxMzQsOTQyODY4NjlCAkxL&skid=223f69b3-4779-47cf-b8d9-8d74d353c7fe&g_st=iw';
+
   return (
     <div className="min-h-screen bg-luxury-ivory">
       <LuxuryNav />
@@ -252,7 +254,7 @@ export default function LuxuryHomePage() {
           <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto mb-16">
             {[
               { icon: Phone, title: '+94 77 123 4567', label: 'Reservations' },
-              { icon: MapPin, title: 'Kandy Road', label: 'Sri Lanka' },
+              { icon: MapPin, title: 'Sueen Nature, Baduraliya', label: 'Sri Lanka' },
               { icon: Clock, title: '6:30 AM - 10:30 PM', label: 'Daily' }
             ].map((item, index) => (
               <div key={index} className="text-center group">
@@ -260,9 +262,43 @@ export default function LuxuryHomePage() {
                 <p className="text-sm tracking-wide text-luxury-charcoal/60 mb-2 uppercase">
                   {item.label}
                 </p>
-                <p className="text-luxury-charcoal font-light">{item.title}</p>
+                {item.icon === MapPin ? (
+                  <a
+                    href={googleMapsLocationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-luxury-charcoal font-light hover:text-luxury-gold transition-colors duration-300"
+                  >
+                    {item.title}
+                  </a>
+                ) : (
+                  <p className="text-luxury-charcoal font-light">{item.title}</p>
+                )}
               </div>
             ))}
+          </div>
+
+          <div className="max-w-5xl mx-auto mb-12">
+            <div className="overflow-hidden border border-luxury-gold/20 bg-luxury-cream">
+              <iframe
+                title="Sueen Nature Baduraliya Location Map"
+                src="https://www.google.com/maps?q=H735+X64+Sueen+Nature,+Baduraliya&output=embed"
+                className="w-full h-[380px]"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <div className="text-center mt-4">
+              <a
+                href={googleMapsLocationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-luxury-charcoal hover:text-luxury-gold transition-colors duration-300"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm tracking-wide">Open in Google Maps</span>
+              </a>
+            </div>
           </div>
 
           <div className="text-center">

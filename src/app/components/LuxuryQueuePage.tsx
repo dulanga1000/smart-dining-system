@@ -11,6 +11,10 @@ import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
 
 export default function LuxuryQueuePage() {
+  const businessName = 'Sueen Nature';
+  const businessAddress = 'Baduraliya, Sri Lanka';
+  const businessContact = '+94 77 123 4567';
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', phone: '', guestCount: '2' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,14 +47,21 @@ export default function LuxuryQueuePage() {
   };
 
   if (queueResult) {
-    const handlePrintTicket = () => {
+    const handlePrintTicket = async () => {
       const printWindow = window.open('', '_blank', 'width=400,height=600');
       if (!printWindow) return;
+
+      let qrDataUrl = '';
+      try {
+        qrDataUrl = await QRCode.toDataURL(`QUEUE:${queueResult.ticketNumber}`, { width: 180, margin: 1 });
+      } catch {
+        qrDataUrl = '';
+      }
 
       printWindow.document.write(`
         <html>
           <head>
-            <title>Queue Ticket #${queueResult.ticketNumber}</title>
+            <title>Queue Receipt #${queueResult.ticketNumber}</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
               body { 
@@ -73,12 +84,12 @@ export default function LuxuryQueuePage() {
           </head>
           <body>
             <div class="header">
-              <div class="logo">Smart Dining</div>
-              <div class="sub">Premium Restaurant Experience</div>
-              <div class="sub">123 Culinary Hub, Colombo</div>
+              <div class="logo">${businessName}</div>
+              <div class="sub">${businessAddress}</div>
+              <div class="sub">Contact: ${businessContact}</div>
             </div>
             <div class="divider"></div>
-            <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">VIRTUAL QUEUE TICKET</div>
+            <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">VIRTUAL QUEUE RECEIPT</div>
             <div class="big-ticket">#${queueResult.ticketNumber}</div>
             <div class="divider"></div>
             <div class="row"><span>Name:</span><span>${queueResult.customerName || 'N/A'}</span></div>
@@ -90,7 +101,7 @@ export default function LuxuryQueuePage() {
             <div class="row"><span>Est. Wait:</span><span>${queueResult.estimatedWait} min</span></div>
             <div class="divider"></div>
             <div class="qr">
-              <img src="${document.querySelector('canvas')?.toDataURL() || ''}" alt="QR Code" />
+              <img src="${qrDataUrl}" alt="QR Code" />
             </div>
             <div class="footer">
               Keep this ticket safe.<br/>
@@ -109,7 +120,7 @@ export default function LuxuryQueuePage() {
     };
 
     const handleDownloadTicketPdf = async () => {
-      const doc = new jsPDF({ unit: 'mm', format: [80, 160] });
+      const doc = new jsPDF({ unit: 'mm', format: [80, 220] });
       const width = doc.internal.pageSize.getWidth();
       let y = 15;
 
@@ -120,18 +131,18 @@ export default function LuxuryQueuePage() {
         doc.text(text, (width - textWidth) / 2, yPos);
       };
 
-      centerText('SMART DINING', y, 16, true);
+      centerText(businessName.toUpperCase(), y, 14, true);
       y += 6;
-      centerText('Premium Restaurant Experience', y, 8);
+      centerText(businessAddress, y, 8);
       y += 4;
-      centerText('123 Culinary Hub, Colombo', y, 8);
+      centerText(`Contact: ${businessContact}`, y, 8);
 
       y += 8;
       doc.setLineDashPattern([1, 1], 0);
       doc.line(5, y, width - 5, y);
       y += 8;
 
-      centerText('VIRTUAL QUEUE TICKET', y, 10, true);
+      centerText('VIRTUAL QUEUE RECEIPT', y, 10, true);
       y += 12;
       centerText(`#${queueResult.ticketNumber}`, y, 24, true);
       y += 10;
@@ -182,7 +193,7 @@ export default function LuxuryQueuePage() {
       y += 4;
       centerText('when called. Thank you!', y, 8);
 
-      doc.save(`Queue_Ticket_${queueResult.ticketNumber}.pdf`);
+      doc.save(`Queue_Receipt_${queueResult.ticketNumber}.pdf`);
     };
 
     return (

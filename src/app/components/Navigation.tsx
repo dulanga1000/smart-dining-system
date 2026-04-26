@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone, Clock, MapPin } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
+import logo from '../../assets/logo.png';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,13 +63,7 @@ export default function Navigation() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-gold to-yellow-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">QN</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-green leading-tight">Queen Nature</h1>
-                <p className="text-xs text-gray-600">Resort & Dining</p>
-              </div>
+              <img src={logo} alt="Queen Nature Resort & Dining" className="h-12 w-auto object-contain" />
             </Link>
 
             {/* Desktop Navigation */}

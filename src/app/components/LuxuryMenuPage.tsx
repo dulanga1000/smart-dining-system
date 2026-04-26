@@ -6,6 +6,22 @@ import { toast } from 'sonner';
 import { useCart } from '../contexts/CartContext';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+import Vegetable_Kottu_Roti from '../../assets/Vegetable_Kottu_Roti.jpg';
+import Chicken_Kottu from '../../assets/Chicken_Kottu.jpg';
+import Cheese_Kottu from '../../assets/Cheese_Kottu_Roti.jpg';
+import Seafood_Kottu from '../../assets/Seafood_Kottu_Roti.jpg';
+import Dolphin_Kottu from '../../assets/Dolphin_Kottu_Roti.jpg';
+import Mutton_Kottu from '../../assets/Mutton_Kottu_Roti.jpg';
+import Lamprais from '../../assets/Lamprais.jpg';
+import Authentic_Rice_and_Curry from '../../assets/Authentic_Rice_&_Curry.jpg';
+import String_Hoppers_with_Curry from '../../assets/String_Hoppers_with_Curry.jpeg';
+import Continental_Breakfast_Buffet from '../../assets/Continental_Breakfast_Buffet.jpg';
+import Grilled_Prawns from '../../assets/Grilled_Prawns.jpg';
+import Ceylon_Seafood_Platter from '../../assets/Ceylon_Seafood_Platter.jpg'
+import Egg_Hoppers from '../../assets/Egg_Hoppers.jpg';
+import Devilled_Chicken from '../../assets/Devilled_Chicken.jpg';
+import Fish_Ambul_Thiyal from '../../assets/Fish_Ambul_Thiyal.jpg';
+import Watalappan from '../../assets/Watalappan.jpg';
 
 const menuItems = [
   {
@@ -18,7 +34,7 @@ const menuItems = [
     popular: true,
     price: 850,
     allergens: ["Gluten"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Vegetable_Kottu_Roti,
     prepTime: "15 min",
     calories: 420,
     protein: 12,
@@ -40,7 +56,7 @@ const menuItems = [
     popular: true,
     price: 1200,
     allergens: ["Gluten", "Eggs"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Chicken_Kottu,
     prepTime: "18 min",
     calories: 520,
     protein: 28,
@@ -62,7 +78,7 @@ const menuItems = [
     popular: true,
     price: 1350,
     allergens: ["Gluten", "Dairy", "Eggs"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Cheese_Kottu,
     prepTime: "16 min",
     calories: 580,
     protein: 18,
@@ -84,7 +100,7 @@ const menuItems = [
     popular: true,
     price: 1650,
     allergens: ["Gluten", "Shellfish", "Fish", "Eggs"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Seafood_Kottu,
     prepTime: "20 min",
     calories: 480,
     protein: 32,
@@ -106,7 +122,7 @@ const menuItems = [
     isVeg: false,
     popular: false,
     allergens: ["Gluten", "Fish", "Eggs"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Dolphin_Kottu,
     prepTime: "22 min",
     calories: 460,
     protein: 30,
@@ -128,7 +144,7 @@ const menuItems = [
     popular: false,
     price: 1550,
     allergens: ["Gluten", "Eggs"],
-    image: "https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=800&q=90",
+    image: Mutton_Kottu,
     prepTime: "25 min",
     calories: 620,
     protein: 34,
@@ -150,7 +166,7 @@ const menuItems = [
     popular: true,
     price: 2850,
     allergens: ["Shellfish", "Fish"],
-    image: "https://images.unsplash.com/photo-1761314036779-84078bec535c?w=800&q=90",
+    image: Ceylon_Seafood_Platter,
     prepTime: "20 min",
     calories: 380,
     protein: 42,
@@ -172,7 +188,7 @@ const menuItems = [
     popular: true,
     price: 2250,
     allergens: ["Shellfish", "Dairy"],
-    image: "https://images.unsplash.com/photo-1633504581786-316c8002b1b9?w=800&q=90",
+    image: Grilled_Prawns,
     prepTime: "18 min",
     calories: 320,
     protein: 38,
@@ -194,7 +210,7 @@ const menuItems = [
     popular: true,
     price: 1450,
     allergens: [],
-    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=90",
+    image: Lamprais,
     prepTime: "30 min",
     calories: 680,
     protein: 28,
@@ -216,7 +232,7 @@ const menuItems = [
     popular: true,
     price: 1150,
     allergens: [],
-    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=90",
+    image: Authentic_Rice_and_Curry,
     prepTime: "25 min",
     calories: 480,
     protein: 15,
@@ -238,7 +254,7 @@ const menuItems = [
     popular: true,
     price: 650,
     allergens: [],
-    image: "https://images.unsplash.com/photo-1589301760014-94e2853fc6b8?w=800&q=90",
+    image: String_Hoppers_with_Curry,
     prepTime: "20 min",
     calories: 380,
     protein: 12,
@@ -260,7 +276,7 @@ const menuItems = [
     popular: true,
     price: 1850,
     allergens: ["Gluten", "Dairy"],
-    image: "https://images.unsplash.com/photo-1743525700011-afac212694d7?w=800&q=90",
+    image: Continental_Breakfast_Buffet,
     prepTime: "Self-service",
     calories: 520,
     protein: 18,
@@ -282,7 +298,7 @@ const menuItems = [
     popular: true,
     price: 450,
     allergens: ["Eggs"],
-    image: "https://images.unsplash.com/photo-1630409346897-1a0c42a08fca?w=800&q=90",
+    image: Egg_Hoppers,
     prepTime: "15 min",
     calories: 280,
     protein: 14,
@@ -304,7 +320,7 @@ const menuItems = [
     popular: true,
     price: 1350,
     allergens: [],
-    image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800&q=90",
+    image: Devilled_Chicken,
     prepTime: "22 min",
     calories: 420,
     protein: 36,
@@ -326,7 +342,7 @@ const menuItems = [
     popular: false,
     price: 1250,
     allergens: ["Fish"],
-    image: "https://images.unsplash.com/photo-1580959375944-0be6ea582a60?w=800&q=90",
+    image: Fish_Ambul_Thiyal,
     prepTime: "35 min",
     calories: 340,
     protein: 32,
@@ -348,7 +364,7 @@ const menuItems = [
     popular: true,
     price: 550,
     allergens: ["Eggs", "Dairy"],
-    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=90",
+    image: Watalappan,
     prepTime: "45 min",
     calories: 320,
     protein: 8,

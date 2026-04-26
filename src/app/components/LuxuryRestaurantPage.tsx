@@ -169,7 +169,7 @@ export default function LuxuryRestaurantPage() {
           <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto mb-16">
             {[
               { icon: Phone, title: '+94 77 123 4567', label: 'Reservations' },
-              { icon: MapPin, title: 'Kandy Road', label: 'Sri Lanka' },
+              { icon: MapPin, title: 'Baduraliya', label: 'Sri Lanka' },
               { icon: Clock, title: '6:30 AM - 10:30 PM', label: 'Daily' }
             ].map((item, index) => (
               <div key={index} className="text-center">

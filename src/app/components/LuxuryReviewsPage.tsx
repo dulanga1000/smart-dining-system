@@ -10,7 +10,14 @@ import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
 export default function LuxuryReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([]);
-  const [newReview, setNewReview] = useState({ name: '', rating: 5, comment: '' });
+  const [newReview, setNewReview] = useState({
+    name: '',
+    email: '',
+    rating: 5,
+    title: '',
+    comment: '',
+    visitDate: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -42,12 +49,24 @@ export default function LuxuryReviewsPage() {
           body: JSON.stringify(newReview)
         }
       );
-      if (!response.ok) throw new Error('Failed to submit review');
+
+      const result = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(result?.error || 'Failed to submit review');
+      }
+
       toast.success('Review submitted successfully!');
-      setNewReview({ name: '', rating: 5, comment: '' });
+      setNewReview({
+        name: '',
+        email: '',
+        rating: 5,
+        title: '',
+        comment: '',
+        visitDate: ''
+      });
       fetchReviews();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error?.message || 'Failed to submit review');
     } finally {
       setIsSubmitting(false);
     }
@@ -167,6 +186,20 @@ export default function LuxuryReviewsPage() {
 
                 <div>
                   <label className="flex items-center gap-2 text-luxury-charcoal mb-3 text-sm tracking-wide">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={newReview.email}
+                    onChange={(e) => setNewReview({ ...newReview, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-luxury-charcoal/10 focus:outline-none focus:border-luxury-gold transition-all bg-white text-luxury-charcoal font-light"
+                    placeholder="you@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-luxury-charcoal mb-3 text-sm tracking-wide">
                     <Star className="w-4 h-4 text-luxury-gold" strokeWidth={1.5} />
                     Rating
                   </label>
@@ -184,6 +217,33 @@ export default function LuxuryReviewsPage() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <label className="text-luxury-charcoal mb-3 text-sm tracking-wide block">
+                    Review Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newReview.title}
+                    onChange={(e) => setNewReview({ ...newReview, title: e.target.value })}
+                    className="w-full px-4 py-3 border border-luxury-charcoal/10 focus:outline-none focus:border-luxury-gold transition-all bg-white text-luxury-charcoal font-light"
+                    placeholder="Sum up your experience"
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-luxury-charcoal mb-3 text-sm tracking-wide">
+                    <Calendar className="w-4 h-4 text-luxury-gold" strokeWidth={1.5} />
+                    Visit Date (optional)
+                  </label>
+                  <input
+                    type="date"
+                    value={newReview.visitDate}
+                    onChange={(e) => setNewReview({ ...newReview, visitDate: e.target.value })}
+                    className="w-full px-4 py-3 border border-luxury-charcoal/10 focus:outline-none focus:border-luxury-gold transition-all bg-white text-luxury-charcoal font-light"
+                  />
                 </div>
 
                 <div>

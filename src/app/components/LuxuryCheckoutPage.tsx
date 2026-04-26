@@ -12,6 +12,10 @@ import LuxuryFooter from './LuxuryFooter';
 import QRCodeDisplay from './QRCodeDisplay';
 
 export default function LuxuryCheckoutPage() {
+  const businessName = 'Sueen Nature';
+  const businessAddress = 'Sueen Baduraliya, Sri Lanka';
+  const businessContact = '+94 77 123 4567';
+
   const navigate = useNavigate();
   const { items, totalItems, totalPrice, clearCart } = useCart();
   const [formData, setFormData] = useState({
@@ -22,6 +26,12 @@ export default function LuxuryCheckoutPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
+
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat('en-LK', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value);
 
   if (items.length === 0 && !orderSuccess) {
     navigate('/cart');
@@ -51,28 +61,46 @@ export default function LuxuryCheckoutPage() {
   };
 
   if (orderSuccess) {
-    const handlePrint = () => {
+    const handlePrint = async () => {
       const printWindow = window.open('', '_blank', 'width=400,height=600');
       if (!printWindow) return;
 
-      const itemsHtml = (orderSuccess.items || items).map((item: any) => `
-        <div class="row">
-          <span>${item.quantity}x ${item.name}</span>
-          <span>LKR ${(item.price || 0) * item.quantity}</span>
-        </div>
+      const orderItems = orderSuccess.items || items;
+      const totalCount = orderSuccess.totalItems || orderItems.reduce((sum: number, i: any) => sum + i.quantity, 0);
+      const subtotal = orderSuccess.totalPrice || orderItems.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0);
+      const serviceCharge = 0;
+      const tax = 0;
+      const grandTotal = subtotal + serviceCharge + tax;
+      const issuedAt = new Date();
+      const invoiceNo = orderSuccess.orderId;
+
+      let qrDataUrl = '';
+      try {
+        qrDataUrl = await QRCode.toDataURL(`ORDER:${orderSuccess.orderId}`, { width: 180, margin: 1 });
+      } catch {
+        qrDataUrl = '';
+      }
+
+      const itemsHtml = orderItems.map((item: any) => `
+        <tr>
+          <td>${item.name}</td>
+          <td style="text-align:center;">${item.quantity}</td>
+          <td style="text-align:right;">${formatCurrency(item.price || 0)}</td>
+          <td style="text-align:right;">${formatCurrency((item.price || 0) * item.quantity)}</td>
+        </tr>
       `).join('');
 
       printWindow.document.write(`
         <html>
           <head>
-            <title>Order Bill ${orderSuccess.orderId}</title>
+            <title>${businessName} Bill ${orderSuccess.orderId}</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
               body { 
                 font-family: 'Space Mono', monospace; 
                 padding: 20px; 
                 color: #000; 
-                width: 300px; 
+                width: 330px; 
                 margin: 0 auto; 
               }
               .header { text-align: center; margin-bottom: 20px; }
@@ -80,43 +108,76 @@ export default function LuxuryCheckoutPage() {
               .sub { font-size: 12px; color: #444; }
               .divider { border-top: 1px dashed #000; margin: 15px 0; }
               .row { display: flex; justify-content: space-between; font-size: 14px; margin: 8px 0; }
-              .big-ticket { font-size: 18px; font-weight: bold; text-align: center; margin: 15px 0; }
               .qr { margin-top: 20px; text-align: center; }
               img { width: 120px; height: 120px; display: block; margin: 0 auto; }
               .footer { text-align: center; font-size: 12px; margin-top: 20px; color: #555; }
-              .total-row { font-size: 16px; font-weight: bold; margin-top: 10px; }
+              table { width: 100%; border-collapse: collapse; font-size: 12px; }
+              th, td { padding: 6px 2px; border-bottom: 1px dotted #bbb; }
+              th { text-align: left; font-size: 11px; text-transform: uppercase; }
+              .totals .row { margin: 4px 0; }
+              .grand { font-size: 16px; font-weight: 700; }
             </style>
           </head>
           <body>
             <div class="header">
-              <div class="logo">Smart Dining</div>
-              <div class="sub">Premium Restaurant Experience</div>
-              <div class="sub">123 Culinary Hub, Colombo</div>
+              <div class="logo">${businessName}</div>
+              <div class="sub">${businessAddress}</div>
+              <div class="sub">Contact: ${businessContact}</div>
             </div>
             <div class="divider"></div>
-            <div class="row"><span>Order ID:</span><span>${orderSuccess.orderId}</span></div>
+            <div class="row"><span>Invoice:</span><span>${invoiceNo}</span></div>
+            <div class="row"><span>Date:</span><span>${issuedAt.toLocaleDateString()}</span></div>
+            <div class="row"><span>Time:</span><span>${issuedAt.toLocaleTimeString()}</span></div>
             <div class="row"><span>Name:</span><span>${orderSuccess.name}</span></div>
             <div class="row"><span>Phone:</span><span>${orderSuccess.phone}</span></div>
-            <div class="divider"></div>
-            <div style="font-weight: bold; margin-bottom: 10px; font-size: 12px;">ITEMS</div>
-            ${itemsHtml}
-            <div class="divider"></div>
-            <div class="row">
-              <span>Items Total:</span>
-              <span>${orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0)}</span>
-            </div>
-            <div class="row total-row">
-              <span>TOTAL (LKR):</span>
-              <span>${orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}</span>
-            </div>
-            <div class="divider"></div>
             <div class="row"><span>Payment:</span><span>${orderSuccess.paymentMethod}</span></div>
+            <div class="divider"></div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th style="text-align:center;">Qty</th>
+                  <th style="text-align:right;">Rate</th>
+                  <th style="text-align:right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtml}
+              </tbody>
+            </table>
+
+            <div class="divider"></div>
+            <div class="totals">
+              <div class="row">
+                <span>Total Items:</span>
+                <span>${totalCount}</span>
+              </div>
+              <div class="row">
+                <span>Subtotal:</span>
+                <span>LKR ${formatCurrency(subtotal)}</span>
+              </div>
+              <div class="row">
+                <span>Service Charge:</span>
+                <span>LKR ${formatCurrency(serviceCharge)}</span>
+              </div>
+              <div class="row">
+                <span>Tax:</span>
+                <span>LKR ${formatCurrency(tax)}</span>
+              </div>
+              <div class="row grand">
+                <span>Grand Total:</span>
+                <span>LKR ${formatCurrency(grandTotal)}</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
             <div class="qr">
-              <img src="${document.querySelector('canvas')?.toDataURL() || ''}" alt="QR Code" />
+              <img src="${qrDataUrl}" alt="QR Code" />
             </div>
             <div class="footer">
               Thank you for dining with us!<br/>
-              Please present this bill.
+              Please keep this bill for reference.
             </div>
           </body>
         </html>
@@ -130,9 +191,18 @@ export default function LuxuryCheckoutPage() {
     };
 
     const handleDownload = async () => {
-      const doc = new jsPDF({ unit: 'mm', format: [80, 250] });
+      const orderItems = orderSuccess.items || items;
+      const dynamicHeight = Math.max(260, Math.min(600, 180 + (orderItems.length * 8)));
+      const doc = new jsPDF({ unit: 'mm', format: [80, dynamicHeight] });
       const width = doc.internal.pageSize.getWidth();
       let y = 15;
+
+      const totalCount = orderSuccess.totalItems || orderItems.reduce((sum: number, i: any) => sum + i.quantity, 0);
+      const subtotal = orderSuccess.totalPrice || orderItems.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0);
+      const serviceCharge = 0;
+      const tax = 0;
+      const grandTotal = subtotal + serviceCharge + tax;
+      const issuedAt = new Date();
 
       const centerText = (text: string, yPos: number, size = 10, isBold = false) => {
         doc.setFontSize(size);
@@ -141,27 +211,33 @@ export default function LuxuryCheckoutPage() {
         doc.text(text, (width - textWidth) / 2, yPos);
       };
 
-      centerText('SMART DINING', y, 16, true);
+      centerText(businessName.toUpperCase(), y, 14, true);
       y += 6;
-      centerText('Premium Restaurant Experience', y, 8);
+      centerText(businessAddress, y, 8);
       y += 4;
-      centerText('123 Culinary Hub, Colombo', y, 8);
+      centerText(`Contact: ${businessContact}`, y, 8);
 
       y += 8;
       doc.setLineDashPattern([1, 1], 0);
       doc.line(5, y, width - 5, y);
       y += 8;
 
-      centerText('ORDER BILL', y, 12, true);
+      centerText('TAX INVOICE / BILL', y, 10, true);
       y += 8;
 
       doc.setFontSize(9);
       doc.setFont('courier', 'normal');
-      doc.text(`ID: ${orderSuccess.orderId}`, 5, y);
+      doc.text(`Invoice: ${orderSuccess.orderId}`, 5, y);
+      y += 5;
+      doc.text(`Date: ${issuedAt.toLocaleDateString()}`, 5, y);
+      y += 5;
+      doc.text(`Time: ${issuedAt.toLocaleTimeString()}`, 5, y);
       y += 5;
       doc.text(`Customer: ${orderSuccess.name}`, 5, y);
       y += 5;
       doc.text(`Phone: ${orderSuccess.phone}`, 5, y);
+      y += 5;
+      doc.text(`Payment: ${orderSuccess.paymentMethod}`, 5, y);
       y += 5;
 
       y += 3;
@@ -170,17 +246,19 @@ export default function LuxuryCheckoutPage() {
       y += 6;
 
       doc.setFont('courier', 'bold');
-      doc.text('QTY  ITEM', 5, y);
-      doc.text('TOTAL', width - 5, y, { align: 'right' });
+      doc.text('ITEM', 5, y);
+      doc.text('QTY', 42, y, { align: 'right' });
+      doc.text('RATE', 57, y, { align: 'right' });
+      doc.text('AMT', width - 5, y, { align: 'right' });
       doc.setFont('courier', 'normal');
       y += 6;
 
-      const orderItems = orderSuccess.items || items;
       orderItems.forEach((item: any) => {
-        const itemLine = `${item.quantity}x ${item.name}`;
-        const priceLine = `${(item.price || 0) * item.quantity}`;
-        doc.text(itemLine.substring(0, 20), 5, y);
-        doc.text(priceLine, width - 5, y, { align: 'right' });
+        const lineTotal = (item.price || 0) * item.quantity;
+        doc.text(String(item.name || '').substring(0, 14), 5, y);
+        doc.text(String(item.quantity), 42, y, { align: 'right' });
+        doc.text(formatCurrency(item.price || 0), 57, y, { align: 'right' });
+        doc.text(formatCurrency(lineTotal), width - 5, y, { align: 'right' });
         y += 5;
       });
 
@@ -190,15 +268,23 @@ export default function LuxuryCheckoutPage() {
       y += 6;
 
       doc.text('Total Items:', 5, y);
-      const totalCount = orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0);
       doc.text(totalCount.toString(), width - 5, y, { align: 'right' });
+      y += 6;
+
+      doc.text('Subtotal:', 5, y);
+      doc.text(`LKR ${formatCurrency(subtotal)}`, width - 5, y, { align: 'right' });
+      y += 5;
+      doc.text('Service Charge:', 5, y);
+      doc.text(`LKR ${formatCurrency(serviceCharge)}`, width - 5, y, { align: 'right' });
+      y += 5;
+      doc.text('Tax:', 5, y);
+      doc.text(`LKR ${formatCurrency(tax)}`, width - 5, y, { align: 'right' });
       y += 6;
 
       doc.setFontSize(11);
       doc.setFont('courier', 'bold');
-      doc.text('TOTAL (LKR):', 5, y);
-      const finalPrice = orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0);
-      doc.text(finalPrice.toString(), width - 5, y, { align: 'right' });
+      doc.text('GRAND TOTAL:', 5, y);
+      doc.text(`LKR ${formatCurrency(grandTotal)}`, width - 5, y, { align: 'right' });
 
       y += 8;
       doc.setLineDashPattern([1, 1], 0);
@@ -214,9 +300,9 @@ export default function LuxuryCheckoutPage() {
 
       centerText('Thank you for dining with us!', y, 8);
       y += 4;
-      centerText('Please present this bill.', y, 8);
+      centerText('Please keep this bill for reference.', y, 8);
 
-      doc.save(`Order_${orderSuccess.orderId}.pdf`);
+      doc.save(`Sueen_Nature_Bill_${orderSuccess.orderId}.pdf`);
     };
 
     return (
@@ -235,84 +321,90 @@ export default function LuxuryCheckoutPage() {
 
           {/* Bill section to print/download */}
           <div id="order-bill">
-            <div className="border border-luxury-charcoal/10 p-8 mb-12 text-left">
-              <div className="grid gap-6">
-                <div className="flex items-start gap-4">
-                  <CreditCard className="w-5 h-5 text-luxury-gold mt-1" strokeWidth={1.5} />
-                  <div className="flex-1">
-                    <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-1 uppercase">Order ID</p>
-                    <p className="text-luxury-charcoal font-light">{orderSuccess.orderId}</p>
+            <div className="border border-luxury-charcoal/10 p-8 mb-12 text-left bg-white">
+              <div className="text-center pb-4 border-b border-dashed border-luxury-charcoal/20">
+                <h2 className="font-serif text-3xl text-luxury-charcoal">{businessName}</h2>
+                <p className="text-sm text-luxury-charcoal/70 mt-1">{businessAddress}</p>
+                <p className="text-sm text-luxury-charcoal/70">Contact: {businessContact}</p>
+                <p className="text-xs tracking-[0.22em] uppercase text-luxury-charcoal/50 mt-2">Tax Invoice / Bill</p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4 py-5 border-b border-dashed border-luxury-charcoal/20 text-sm">
+                <div className="space-y-2">
+                  <p><span className="text-luxury-charcoal/60">Invoice:</span> <span className="text-luxury-charcoal">{orderSuccess.orderId}</span></p>
+                  <p><span className="text-luxury-charcoal/60">Date:</span> <span className="text-luxury-charcoal">{new Date().toLocaleDateString()}</span></p>
+                  <p><span className="text-luxury-charcoal/60">Time:</span> <span className="text-luxury-charcoal">{new Date().toLocaleTimeString()}</span></p>
+                </div>
+                <div className="space-y-2 sm:text-right">
+                  <p><span className="text-luxury-charcoal/60">Customer:</span> <span className="text-luxury-charcoal">{orderSuccess.name}</span></p>
+                  <p><span className="text-luxury-charcoal/60">Phone:</span> <span className="text-luxury-charcoal">{orderSuccess.phone}</span></p>
+                  <p><span className="text-luxury-charcoal/60">Payment:</span> <span className="text-luxury-charcoal">{orderSuccess.paymentMethod}</span></p>
+                </div>
+              </div>
+
+              {orderSuccess.specialInstructions && (
+                <div className="py-4 border-b border-dashed border-luxury-charcoal/20">
+                  <div className="flex items-start gap-3 text-sm">
+                    <MessageSquare className="w-4 h-4 text-luxury-gold mt-0.5" strokeWidth={1.5} />
+                    <p className="text-luxury-charcoal/80"><span className="text-luxury-charcoal/60">Special Note:</span> {orderSuccess.specialInstructions}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <User className="w-5 h-5 text-luxury-gold mt-1" strokeWidth={1.5} />
-                  <div className="flex-1">
-                    <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-1 uppercase">Name</p>
-                    <p className="text-luxury-charcoal font-light">{orderSuccess.name}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Phone className="w-5 h-5 text-luxury-gold mt-1" strokeWidth={1.5} />
-                  <div className="flex-1">
-                    <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-1 uppercase">Phone</p>
-                    <p className="text-luxury-charcoal font-light">{orderSuccess.phone}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <CreditCard className="w-5 h-5 text-luxury-gold mt-1" strokeWidth={1.5} />
-                  <div className="flex-1">
-                    <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-1 uppercase">Payment Method</p>
-                    <p className="text-luxury-charcoal font-light">{orderSuccess.paymentMethod}</p>
-                  </div>
-                </div>
-                {orderSuccess.specialInstructions && (
-                  <div className="flex items-start gap-4">
-                    <MessageSquare className="w-5 h-5 text-luxury-gold mt-1" strokeWidth={1.5} />
-                    <div className="flex-1">
-                      <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-1 uppercase">Special Instructions</p>
-                      <p className="text-luxury-charcoal font-light">{orderSuccess.specialInstructions}</p>
-                    </div>
-                  </div>
-                )}
-                <div className="mt-6">
-                  <p className="text-xs tracking-wide text-luxury-charcoal/60 mb-2 uppercase">Order Items</p>
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr>
-                        <th className="py-1 px-2 border-b border-luxury-charcoal/10">Item</th>
-                        <th className="py-1 px-2 border-b border-luxury-charcoal/10">Qty</th>
-                        <th className="py-1 px-2 border-b border-luxury-charcoal/10">Price</th>
-                        <th className="py-1 px-2 border-b border-luxury-charcoal/10">Total</th>
+              )}
+
+              <div className="overflow-x-auto py-5 border-b border-dashed border-luxury-charcoal/20">
+                <table className="w-full min-w-[520px] text-sm border-collapse">
+                  <thead>
+                    <tr className="text-luxury-charcoal/70 uppercase text-xs tracking-wide">
+                      <th className="text-left py-2 border-b border-luxury-charcoal/10">Item</th>
+                      <th className="text-right py-2 border-b border-luxury-charcoal/10">Qty</th>
+                      <th className="text-right py-2 border-b border-luxury-charcoal/10">Rate (LKR)</th>
+                      <th className="text-right py-2 border-b border-luxury-charcoal/10">Amount (LKR)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(orderSuccess.items || items).map((item: any, idx: number) => (
+                      <tr key={idx} className="border-b border-luxury-charcoal/5">
+                        <td className="py-2 text-luxury-charcoal">{item.name}</td>
+                        <td className="py-2 text-right text-luxury-charcoal">{item.quantity}</td>
+                        <td className="py-2 text-right text-luxury-charcoal">{formatCurrency(item.price || 0)}</td>
+                        <td className="py-2 text-right text-luxury-charcoal">{formatCurrency((item.price || 0) * item.quantity)}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {(orderSuccess.items || items).map((item: any, idx: number) => (
-                        <tr key={idx}>
-                          <td className="py-1 px-2">{item.name}</td>
-                          <td className="py-1 px-2">{item.quantity}</td>
-                          <td className="py-1 px-2">LKR {item.price}</td>
-                          <td className="py-1 px-2">LKR {(item.price || 0) * item.quantity}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="flex justify-end mt-4">
-                    <div>
-                      <div className="flex justify-between gap-8">
-                        <span className="text-luxury-charcoal/70">Total Items:</span>
-                        <span className="text-luxury-charcoal">{orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0)}</span>
-                      </div>
-                      <div className="flex justify-between gap-8">
-                        <span className="text-luxury-charcoal/70">Subtotal:</span>
-                        <span className="text-luxury-charcoal">LKR {orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}</span>
-                      </div>
-                      <div className="flex justify-between gap-8 font-bold text-lg mt-2">
-                        <span className="text-luxury-gold">Total:</span>
-                        <span className="text-luxury-gold">LKR {orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}</span>
-                      </div>
-                    </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="pt-5 flex justify-end">
+                <div className="w-full max-w-sm space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-luxury-charcoal/60">Total Items</span>
+                    <span className="text-luxury-charcoal">{orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-luxury-charcoal/60">Subtotal</span>
+                    <span className="text-luxury-charcoal">LKR {formatCurrency(orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0))}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-luxury-charcoal/60">Service Charge</span>
+                    <span className="text-luxury-charcoal">LKR {formatCurrency(0)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-luxury-charcoal/60">Tax</span>
+                    <span className="text-luxury-charcoal">LKR {formatCurrency(0)}</span>
+                  </div>
+                  <div className="flex justify-between border-t border-luxury-charcoal/20 pt-2 font-semibold text-base">
+                    <span className="text-luxury-gold">Grand Total</span>
+                    <span className="text-luxury-gold">LKR {formatCurrency(orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0))}</span>
                   </div>
                 </div>
+              </div>
+
+              <div className="pt-5 mt-5 border-t border-dashed border-luxury-charcoal/20 text-center text-xs text-luxury-charcoal/60">
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <MapPin className="w-3.5 h-3.5 text-luxury-gold" strokeWidth={1.5} />
+                  <span>{businessAddress}</span>
+                </div>
+                <p>Contact: {businessContact}</p>
               </div>
             </div>
 

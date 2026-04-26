@@ -4,65 +4,77 @@ import { useState } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
+import Luxury_Buffet_Spread from '../../assets/Luxury Buffet Spread.jpg';
+import Elegant_Buffet_Table from '../../assets/Elegant Buffet Table.jpg';
+import Premium_Food_Selection from '../../assets/Authentic_Rice_&_Curry.jpg';
+import International_Cuisine from '../../assets/International Cuisine.jpg';
+import Elegant_Dining_Area from '../../assets/Elegant Dining Area.jpg';
+import Modern_Interior from '../../assets/Modern Interior.jpg';
+import Dining_by_the_Ocean from '../../assets/Dining by the Ocean.jpg';
+import Fine_Dining_Experience from '../../assets/Fine Dining Experience.jpg';
+import Authentic_Curry_Selection from '../../assets/Authentic Curry Selection.jpg';
+import Traditional_Kottu_Roti from '../../assets/Dolphin_Kottu_Roti.jpg';
+import Sri_Lankan_Feast from '../../assets/Sri Lankan Feast.jpg';
+import Local_Delicacies from '../../assets/Local Delicacies.jpg';
 
 const galleryImages = [
   {
-    url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80',
+    url: Luxury_Buffet_Spread,
     title: 'Luxury Buffet Spread',
     category: 'Buffet'
   },
   {
-    url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80',
+    url: Elegant_Buffet_Table,
     title: 'Elegant Buffet Table',
     category: 'Buffet'
   },
   {
-    url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80',
+    url: Premium_Food_Selection,
     title: 'Premium Food Selection',
     category: 'Buffet'
   },
   {
-    url: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1200&q=80',
+    url: International_Cuisine,
     title: 'International Cuisine',
     category: 'Buffet'
   },
   {
-    url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80',
+    url: Elegant_Dining_Area,
     title: 'Elegant Dining Area',
     category: 'Restaurant'
   },
   {
-    url: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=80',
+    url: Modern_Interior,
     title: 'Modern Interior',
     category: 'Restaurant'
   },
   {
-    url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&q=80',
+    url: Dining_by_the_Ocean,
     title: 'Dining by the Ocean',
     category: 'Restaurant'
   },
   {
-    url: 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=1200&q=80',
+    url: Fine_Dining_Experience,
     title: 'Fine Dining Experience',
     category: 'Restaurant'
   },
   {
-    url: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1200&q=80',
+    url: Authentic_Curry_Selection,
     title: 'Authentic Curry Selection',
     category: 'Food'
   },
   {
-    url: 'https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=1200&q=80',
+    url: Traditional_Kottu_Roti,
     title: 'Traditional Kottu Roti',
     category: 'Food'
   },
   {
-    url: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=1200&q=80',
+    url: Sri_Lankan_Feast,
     title: 'Sri Lankan Feast',
     category: 'Food'
   },
   {
-    url: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=1200&q=80',
+    url: Local_Delicacies,
     title: 'Local Delicacies',
     category: 'Food'
   }

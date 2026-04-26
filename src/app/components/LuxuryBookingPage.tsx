@@ -11,6 +11,10 @@ import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
 
 export default function LuxuryBookingPage() {
+  const businessName = 'Sueen Nature';
+  const businessAddress = 'Sueen Baduraliya, Sri Lanka';
+  const businessContact = '+94 77 123 4567';
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -89,9 +93,9 @@ export default function LuxuryBookingPage() {
           </head>
           <body>
             <div class="header">
-              <div class="logo">Smart Dining</div>
-              <div class="sub">Premium Restaurant Experience</div>
-              <div class="sub">123 Culinary Hub, Colombo</div>
+              <div class="logo">Sueen Nature</div>
+              <div class="sub">Baduraliya, Sri Lanka</div>
+              <div class="sub">Contact: +94 77 123 4567</div>
             </div>
             <div class="divider"></div>
             <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">RESERVATION TICKET</div>
@@ -124,7 +128,7 @@ export default function LuxuryBookingPage() {
     };
 
     const handleDownloadReceipt = async () => {
-      const doc = new jsPDF({ unit: 'mm', format: [80, 160] });
+      const doc = new jsPDF({ unit: 'mm', format: [80, 230] });
       const width = doc.internal.pageSize.getWidth();
       let y = 15;
 
@@ -135,11 +139,11 @@ export default function LuxuryBookingPage() {
         doc.text(text, (width - textWidth) / 2, yPos);
       };
 
-      centerText('SMART DINING', y, 16, true);
+      centerText(businessName.toUpperCase(), y, 14, true);
       y += 6;
-      centerText('Premium Restaurant Experience', y, 8);
+      centerText(businessAddress, y, 8);
       y += 4;
-      centerText('123 Culinary Hub, Colombo', y, 8);
+      centerText(`Contact: ${businessContact}`, y, 8);
 
       y += 8;
       doc.setLineDashPattern([1, 1], 0);
