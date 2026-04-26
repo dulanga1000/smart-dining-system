@@ -1,20 +1,25 @@
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { Link } from 'react-router';
+import logo from '../../assets/logo.png';
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-green to-green/90 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+    <footer className="relative overflow-hidden bg-gradient-to-br from-green via-green to-[#0d3c2f] text-white">
+      <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-gold/10 blur-3xl"></div>
+      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
+      <div className="container relative mx-auto px-4 py-14">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           {/* About */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gold rounded-full flex items-center justify-center">
-                <span className="text-white font-bold">QN</span>
-              </div>
+            <div className="flex items-center gap-3 mb-5">
+              <img
+                src={logo}
+                alt="Sueen Nature"
+                className="h-12 w-12 rounded-xl object-cover ring-2 ring-gold/50"
+              />
               <div>
-                <h3 className="font-bold text-lg">Queen Nature</h3>
-                <p className="text-xs text-white/80">Resort & Dining</p>
+                <h3 className="text-xl font-bold tracking-wide">Sueen Nature</h3>
+                <p className="text-xs uppercase tracking-[0.25em] text-gold/90">Resort and Dining</p>
               </div>
             </div>
             <p className="text-white/80 text-sm leading-relaxed mb-4">
@@ -88,8 +93,8 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/80">Queen Nature Resort</p>
-                  <p className="text-sm text-white/80">Kandy Road, Sri Lanka</p>
+                  <p className="text-sm text-white/80">Sueen Nature</p>
+                  <p className="text-sm text-white/80">Baduraliya, Sri Lanka</p>
                 </div>
               </li>
               <li className="flex items-center gap-3">
@@ -100,8 +105,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-gold flex-shrink-0" />
-                <a href="mailto:info@queensnature.lk" className="text-sm text-white/80 hover:text-gold transition-colors">
-                  info@queensnature.lk
+                <a href="mailto:info@sueennature.lk" className="text-sm text-white/80 hover:text-gold transition-colors">
+                  info@sueennature.lk
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -119,7 +124,7 @@ export default function Footer() {
         <div className="border-t border-white/20 pt-6 mt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-white/60">
-              © {new Date().getFullYear()} Queen Nature Resort. All rights reserved.
+              © {new Date().getFullYear()} Sueen Nature. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-sm text-white/60 hover:text-gold transition-colors">
