@@ -1,6 +1,7 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
+import QRCodeDisplay from './QRCodeDisplay';
 
 interface QueueJoinedReceiptProps {
   queueNumber: string;
@@ -144,7 +145,7 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
         <h1 className="font-serif text-3xl text-luxury-charcoal mb-4">Queue Joined</h1>
         <p className="text-luxury-gold text-lg mb-2">Queue Number: <span className="font-bold">{queueNumber}</span></p>
         <div className="mb-4">
-          <QRCodeCanvas value={`QUEUE:${queueNumber} `} size={120} />
+          <QRCodeDisplay value={`QUEUE:${queueNumber} `} size={120} />
         </div>
         <div className="text-left mb-6">
           <p><span className="font-medium">Name:</span> {name}</p>
@@ -169,8 +170,5 @@ const QueueJoinedReceipt: React.FC<QueueJoinedReceiptProps> = ({ queueNumber, na
     </div>
   );
 };
-
-// Use a simple QR code canvas for display
-import { QRCodeCanvas } from 'qrcode.react';
 
 export default QueueJoinedReceipt;
