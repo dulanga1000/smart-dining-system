@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+import Elegant_Dining_Area from '../../assets/Elegant Dining Area.jpg';
 
 import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
@@ -92,8 +93,8 @@ export default function LuxuryRestaurantPage() {
               className="relative h-[500px]"
             >
               <img
-                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80"
-                alt="Fine Dining"
+                src={Elegant_Dining_Area}
+                alt="Elegant Dining Area"
                 className="w-full h-full object-cover"
               />
             </motion.div>

@@ -99,7 +99,7 @@ export default function RestaurantInfoPage() {
                 <h2 className="text-3xl font-bold text-green mb-4">About Our Buffet</h2>
                 <div className="w-24 h-1 bg-gold mb-6"></div>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Experience world-class buffet dining at Queen Nature Resort. Our extensive buffet features authentic Sri Lankan cuisine, international favorites, and live cooking stations.
+                  Experience world-class buffet dining at Sueen Nature Resort. Our extensive buffet features authentic Sri Lankan cuisine, international favorites, and live cooking stations.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
                   With our innovative virtual queue system, you can enjoy premium dining without the hassle of physical waiting lines. Book in advance or join the queue remotely and receive real-time updates.
@@ -245,7 +245,7 @@ export default function RestaurantInfoPage() {
                     <MapPin className="w-5 h-5 text-gold mt-1" />
                     <div>
                       <p className="font-semibold text-green">Address</p>
-                      <p className="text-sm text-gray-600">Queen Nature Resort<br />Kandy Road, Sri Lanka</p>
+                      <p className="text-sm text-gray-600">Sueen Nature Resort<br />Baduraliya, Sri Lanka</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -272,7 +272,7 @@ export default function RestaurantInfoPage() {
                 </div>
                 <div className="p-4">
                   <p className="text-sm text-gray-600 text-center">
-                    Queen Nature Resort, Kandy
+                    Sueen Nature Resort, Baduraliya
                   </p>
                 </div>
               </div>

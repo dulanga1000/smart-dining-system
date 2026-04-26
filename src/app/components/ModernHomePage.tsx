@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Clock, MapPin, Phone, Star, UtensilsCrossed, Camera, MessageSquare, BarChart3, Gift, CheckCircle, TrendingUp, Users, Sparkles, ArrowRight, Play } from 'lucide-react';
+import { Clock, Star, UtensilsCrossed, Camera, MessageSquare, Gift, CheckCircle, TrendingUp, Users, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 import Navigation from './Navigation';
 import Footer from './Footer';
@@ -120,7 +120,7 @@ export default function ModernHomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-green mb-4">
-              Why Choose Queen Nature?
+              Why Choose Sueen Nature?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Revolutionary dining experience with premium quality and exceptional service
