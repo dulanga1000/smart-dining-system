@@ -13,7 +13,6 @@ export default function LuxuryFooter() {
               <img src={logo} alt="Sueen Nature" className="h-12 w-12 rounded-xl object-cover ring-2 ring-luxury-gold/40" />
               <div>
                 <h3 className="font-serif text-2xl">Sueen Nature</h3>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-luxury-gold">Resort and Dining</p>
               </div>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">
