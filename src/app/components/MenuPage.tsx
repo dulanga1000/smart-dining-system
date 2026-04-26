@@ -4,6 +4,70 @@ import { Link } from 'react-router';
 import Navigation from './Navigation';
 import Footer from './Footer';
 
+function getMenuItemImage(name: string): string {
+  const item = name.toLowerCase();
+
+  if (item.includes('string hopper') || item.includes('hopper')) {
+    return 'https://images.unsplash.com/photo-1589301760014-94e2853fc6b8?w=1200&q=90';
+  }
+  if (item.includes('kiribath')) {
+    return 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1200&q=90';
+  }
+  if (item.includes('dhal')) {
+    return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=1200&q=90';
+  }
+  if (item.includes('fish curry') || item.includes('seafood')) {
+    return 'https://images.unsplash.com/photo-1633504581786-316c8002b1b9?w=1200&q=90';
+  }
+  if (item.includes('omelette') || item.includes('egg')) {
+    return 'https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=1200&q=90';
+  }
+  if (item.includes('croissant') || item.includes('toast')) {
+    return 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=90';
+  }
+  if (item.includes('fruit') || item.includes('juice')) {
+    return 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=1200&q=90';
+  }
+  if (item.includes('rice') || item.includes('curry varieties')) {
+    return 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1200&q=90';
+  }
+  if (item.includes('chicken')) {
+    return 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=1200&q=90';
+  }
+  if (item.includes('fried rice')) {
+    return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=1200&q=90';
+  }
+  if (item.includes('noodle') || item.includes('kottu')) {
+    return 'https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=1200&q=90';
+  }
+  if (item.includes('pasta')) {
+    return 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=1200&q=90';
+  }
+  if (item.includes('salad')) {
+    return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=90';
+  }
+  if (item.includes('soup')) {
+    return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=1200&q=90';
+  }
+  if (item.includes('watalappam') || item.includes('dessert') || item.includes('ice cream')) {
+    return 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=1200&q=90';
+  }
+  if (item.includes('roast beef')) {
+    return 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=90';
+  }
+  if (item.includes('roast chicken')) {
+    return 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=1200&q=90';
+  }
+  if (item.includes('pizza')) {
+    return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=90';
+  }
+  if (item.includes('chinese')) {
+    return 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=90';
+  }
+
+  return 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=90';
+}
+
 const menuData = {
   breakfast: {
     title: "Breakfast Buffet",
@@ -205,7 +269,14 @@ export default function MenuPage() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-6">
+            <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all overflow-hidden">
+              <img
+                src={getMenuItemImage(item.name)}
+                alt={item.name}
+                loading="lazy"
+                className="h-44 w-full object-cover"
+              />
+              <div className="p-6">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
@@ -237,6 +308,7 @@ export default function MenuPage() {
                     {item.allergens.join(', ')}
                   </span>
                 )}
+              </div>
               </div>
             </div>
           ))}
