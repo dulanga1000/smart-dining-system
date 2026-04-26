@@ -79,13 +79,8 @@ export default function LuxuryFooter() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col items-center gap-4 text-center">
           <p className="text-xs text-white/45">© {new Date().getFullYear()} Sueen Nature. All rights reserved.</p>
-          <div className="flex items-center gap-5 text-xs text-white/45">
-            <Link to="/restaurant" className="hover:text-luxury-gold transition-colors">Privacy</Link>
-            <Link to="/restaurant" className="hover:text-luxury-gold transition-colors">Terms</Link>
-            <Link to="/restaurant" className="hover:text-luxury-gold transition-colors">Support</Link>
-          </div>
         </div>
       </div>
     </footer>

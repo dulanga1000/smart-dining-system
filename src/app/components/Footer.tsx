@@ -125,17 +125,6 @@ export default function Footer() {
             <p className="text-sm text-white/60">
               © {new Date().getFullYear()} Sueen Nature. All rights reserved.
             </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-sm text-white/60 hover:text-gold transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-sm text-white/60 hover:text-gold transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="text-sm text-white/60 hover:text-gold transition-colors">
-                Cookie Policy
-              </a>
-            </div>
           </div>
         </div>
       </div>
