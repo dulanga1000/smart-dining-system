@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+import chickenKottuImage from '../../assets/Chicken_Kottu.jpg';
 
 export default function LuxuryHomePage() {
   return (
@@ -126,7 +127,7 @@ export default function LuxuryHomePage() {
               {
                 title: 'Live Kottu Theatre',
                 description: 'Experience the rhythmic art of traditional Sri Lankan kottu preparation',
-                image: 'https://images.unsplash.com/photo-1698509405901-0c3aad25d14e?w=600&q=90',
+                image: chickenKottuImage,
                 link: '/menu'
               },
               {

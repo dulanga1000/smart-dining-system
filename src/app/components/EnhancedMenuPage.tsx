@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import { toast } from 'sonner';
+import chickenKottuImage from '../../assets/Chicken_Kottu.jpg';
 
 const enhancedMenuData = {
   breakfast: {
@@ -242,7 +243,7 @@ const enhancedMenuData = {
         popular: true,
         allergens: ["Gluten", "Eggs"],
         dietary: [],
-        image: "/src/assets/chicken-kottu.png",
+        image: chickenKottuImage,
         prepTime: "12 min",
         servingSize: "1 portion",
         calories: 480,
@@ -365,7 +366,7 @@ export default function EnhancedMenuPage() {
     toast.success(favorites.includes(id) ? 'Removed from favorites' : 'Added to favorites');
   };
 
-  const shareItem = (item: any) => {
+  const shareItem = () => {
     toast.success('Share link copied to clipboard!');
   };
 
@@ -570,7 +571,7 @@ export default function EnhancedMenuPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        shareItem(item);
+                        shareItem();
                       }}
                       className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all"
                     >
@@ -791,7 +792,7 @@ export default function EnhancedMenuPage() {
                     {favorites.includes(selectedItem.id) ? 'Remove from Favorites' : 'Add to Favorites'}
                   </button>
                   <button
-                    onClick={() => shareItem(selectedItem)}
+                    onClick={() => shareItem()}
                     className="flex-1 px-6 py-4 bg-gold hover:bg-gold/90 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2"
                   >
                     <Share2 className="w-5 h-5" />
