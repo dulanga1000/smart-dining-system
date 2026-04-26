@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Clock, MapPin, Phone, Star, Coffee, Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
 export default function LuxuryRestaurantPage() {
   const [restaurantStatus, setRestaurantStatus] = useState<any>(null);

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Users, Ticket, Activity, Clock, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { toast } from 'sonner';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
 export default function LuxuryQueueStatusPage() {
   const [queueState, setQueueState] = useState<any>(null);
@@ -109,7 +110,7 @@ export default function LuxuryQueueStatusPage() {
                 <Ticket className="w-6 h-6 text-luxury-gold" />
                 Waiting Queue ({waitingQueue.length})
               </h3>
-              
+
               <div className="space-y-4 max-h-96 overflow-y-auto">
                 {waitingQueue.map((customer: any, index: number) => (
                   <div key={customer.ticketNumber} className="flex items-center justify-between p-6 bg-white border border-luxury-gold/20">

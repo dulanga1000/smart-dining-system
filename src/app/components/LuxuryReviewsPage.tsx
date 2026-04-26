@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Star, ThumbsUp, Calendar, User } from 'lucide-react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { toast } from 'sonner';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
+
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
 export default function LuxuryReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([]);

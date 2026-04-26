@@ -6,7 +6,7 @@ import { User, Phone, MapPin, MessageSquare, CheckCircle, CreditCard } from 'luc
 import { motion } from 'motion/react';
 import { toast } from 'sonner';
 import { useCart } from '../contexts/CartContext';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 import LuxuryNav from './LuxuryNav';
 import LuxuryFooter from './LuxuryFooter';
 import QRCodeDisplay from './QRCodeDisplay';
@@ -51,65 +51,172 @@ export default function LuxuryCheckoutPage() {
   };
 
   if (orderSuccess) {
-    // Print handler: print only the bill section
     const handlePrint = () => {
-      const printContents = document.getElementById('order-bill')?.innerHTML;
-      const originalContents = document.body.innerHTML;
-      if (printContents) {
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-        window.location.reload(); // reload to restore app state
-      }
+      const printWindow = window.open('', '_blank', 'width=400,height=600');
+      if (!printWindow) return;
+
+      const itemsHtml = (orderSuccess.items || items).map((item: any) => `
+        <div class="row">
+          <span>${item.quantity}x ${item.name}</span>
+          <span>LKR ${(item.price || 0) * item.quantity}</span>
+        </div>
+      `).join('');
+
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Order Bill ${orderSuccess.orderId}</title>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+              body { 
+                font-family: 'Space Mono', monospace; 
+                padding: 20px; 
+                color: #000; 
+                width: 300px; 
+                margin: 0 auto; 
+              }
+              .header { text-align: center; margin-bottom: 20px; }
+              .logo { font-size: 24px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+              .sub { font-size: 12px; color: #444; }
+              .divider { border-top: 1px dashed #000; margin: 15px 0; }
+              .row { display: flex; justify-content: space-between; font-size: 14px; margin: 8px 0; }
+              .big-ticket { font-size: 18px; font-weight: bold; text-align: center; margin: 15px 0; }
+              .qr { margin-top: 20px; text-align: center; }
+              img { width: 120px; height: 120px; display: block; margin: 0 auto; }
+              .footer { text-align: center; font-size: 12px; margin-top: 20px; color: #555; }
+              .total-row { font-size: 16px; font-weight: bold; margin-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="logo">Smart Dining</div>
+              <div class="sub">Premium Restaurant Experience</div>
+              <div class="sub">123 Culinary Hub, Colombo</div>
+            </div>
+            <div class="divider"></div>
+            <div class="row"><span>Order ID:</span><span>${orderSuccess.orderId}</span></div>
+            <div class="row"><span>Name:</span><span>${orderSuccess.name}</span></div>
+            <div class="row"><span>Phone:</span><span>${orderSuccess.phone}</span></div>
+            <div class="divider"></div>
+            <div style="font-weight: bold; margin-bottom: 10px; font-size: 12px;">ITEMS</div>
+            ${itemsHtml}
+            <div class="divider"></div>
+            <div class="row">
+              <span>Items Total:</span>
+              <span>${orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0)}</span>
+            </div>
+            <div class="row total-row">
+              <span>TOTAL (LKR):</span>
+              <span>${orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}</span>
+            </div>
+            <div class="divider"></div>
+            <div class="row"><span>Payment:</span><span>${orderSuccess.paymentMethod}</span></div>
+            <div class="qr">
+              <img src="${document.querySelector('canvas')?.toDataURL() || ''}" alt="QR Code" />
+            </div>
+            <div class="footer">
+              Thank you for dining with us!<br/>
+              Please present this bill.
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 250);
     };
 
-    // Download handler: generate PDF using jsPDF
     const handleDownload = async () => {
-      const doc = new jsPDF();
-      let y = 10;
-      doc.setFontSize(18);
-      doc.text('Order Bill', 10, y);
+      const doc = new jsPDF({ unit: 'mm', format: [80, 250] });
+      const width = doc.internal.pageSize.getWidth();
+      let y = 15;
+
+      const centerText = (text: string, yPos: number, size = 10, isBold = false) => {
+        doc.setFontSize(size);
+        doc.setFont('courier', isBold ? 'bold' : 'normal');
+        const textWidth = doc.getStringUnitWidth(text) * size / doc.internal.scaleFactor;
+        doc.text(text, (width - textWidth) / 2, yPos);
+      };
+
+      centerText('SMART DINING', y, 16, true);
+      y += 6;
+      centerText('Premium Restaurant Experience', y, 8);
+      y += 4;
+      centerText('123 Culinary Hub, Colombo', y, 8);
+
+      y += 8;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 8;
+
+      centerText('ORDER BILL', y, 12, true);
+      y += 8;
+
+      doc.setFontSize(9);
+      doc.setFont('courier', 'normal');
+      doc.text(`ID: ${orderSuccess.orderId}`, 5, y);
+      y += 5;
+      doc.text(`Customer: ${orderSuccess.name}`, 5, y);
+      y += 5;
+      doc.text(`Phone: ${orderSuccess.phone}`, 5, y);
+      y += 5;
+
+      y += 3;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 6;
+
+      doc.setFont('courier', 'bold');
+      doc.text('QTY  ITEM', 5, y);
+      doc.text('TOTAL', width - 5, y, { align: 'right' });
+      doc.setFont('courier', 'normal');
+      y += 6;
+
+      const orderItems = orderSuccess.items || items;
+      orderItems.forEach((item: any) => {
+        const itemLine = `${item.quantity}x ${item.name}`;
+        const priceLine = `${(item.price || 0) * item.quantity}`;
+        doc.text(itemLine.substring(0, 20), 5, y);
+        doc.text(priceLine, width - 5, y, { align: 'right' });
+        y += 5;
+      });
+
+      y += 3;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 6;
+
+      doc.text('Total Items:', 5, y);
+      const totalCount = orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0);
+      doc.text(totalCount.toString(), width - 5, y, { align: 'right' });
+      y += 6;
+
+      doc.setFontSize(11);
+      doc.setFont('courier', 'bold');
+      doc.text('TOTAL (LKR):', 5, y);
+      const finalPrice = orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0);
+      doc.text(finalPrice.toString(), width - 5, y, { align: 'right' });
+
+      y += 8;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
       y += 10;
-      doc.setFontSize(12);
-      doc.text(`Order ID: ${orderSuccess.orderId}`, 10, y);
-      y += 8;
-      doc.text(`Name: ${orderSuccess.name}`, 10, y);
-      y += 8;
-      doc.text(`Phone: ${orderSuccess.phone}`, 10, y);
-      y += 8;
-      doc.text(`Payment Method: ${orderSuccess.paymentMethod}`, 10, y);
-      y += 8;
-      if (orderSuccess.specialInstructions) {
-        doc.text(`Special Instructions: ${orderSuccess.specialInstructions}`, 10, y);
-        y += 8;
-      }
-      // Generate QR code for order ID
+
       const qrValue = `ORDER:${orderSuccess.orderId}`;
       try {
         const qrDataUrl = await QRCode.toDataURL(qrValue, { width: 100, margin: 1 });
-        doc.addImage(qrDataUrl, 'PNG', 150, 10, 40, 40);
-      } catch (err) {
-        // QR code generation failed, skip
-      }
-      y += 8;
-      doc.text('----------------------------------------', 10, y);
-      y += 8;
-      doc.text('Items:', 10, y);
-      y += 8;
-      (orderSuccess.items || items).forEach((item: any) => {
-        doc.text(`${item.name} x${item.quantity} - LKR ${(item.price || 0) * item.quantity}`, 12, y);
-        y += 7;
-      });
+        doc.addImage(qrDataUrl, 'PNG', (width - 40) / 2, y, 40, 40);
+        y += 45;
+      } catch (err) { }
+
+      centerText('Thank you for dining with us!', y, 8);
       y += 4;
-      doc.text('----------------------------------------', 10, y);
-      y += 8;
-      doc.text(`Total Items: ${orderSuccess.totalItems || items.reduce((sum: number, i: any) => sum + i.quantity, 0)}`, 10, y);
-      y += 8;
-      doc.text(`Subtotal: LKR ${orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}`, 10, y);
-      y += 8;
-      doc.setFontSize(14);
-      doc.text(`Total: LKR ${orderSuccess.totalPrice || items.reduce((sum: number, i: any) => sum + (i.price || 0) * i.quantity, 0)}`, 10, y);
-      doc.save(`Order_Bill_${orderSuccess.orderId}.pdf`);
+      centerText('Please present this bill.', y, 8);
+
+      doc.save(`Order_${orderSuccess.orderId}.pdf`);
     };
 
     return (

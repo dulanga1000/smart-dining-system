@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Clock, MapPin, Phone, Star, UtensilsCrossed, Camera, MessageSquare, BarChart3, Gift, CheckCircle, TrendingUp, Users, Sparkles, ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
 import Navigation from './Navigation';
 import Footer from './Footer';
+
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 
 export default function ModernHomePage() {
   const [restaurantStatus, setRestaurantStatus] = useState<any>(null);

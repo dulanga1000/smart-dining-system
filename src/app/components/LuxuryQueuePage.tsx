@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Phone, User, Users, Ticket, CheckCircle, Printer, Download } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 import { toast } from 'sonner';
 import { motion } from 'motion/react';
 import jsPDF from 'jspdf';
@@ -44,10 +44,7 @@ export default function LuxuryQueuePage() {
 
   if (queueResult) {
     const handlePrintTicket = () => {
-      const ticketElement = document.getElementById('queue-ticket-receipt');
-      if (!ticketElement) return;
-
-      const printWindow = window.open('', '_blank', 'width=900,height=700');
+      const printWindow = window.open('', '_blank', 'width=400,height=600');
       if (!printWindow) return;
 
       printWindow.document.write(`
@@ -55,62 +52,135 @@ export default function LuxuryQueuePage() {
           <head>
             <title>Queue Ticket #${queueResult.ticketNumber}</title>
             <style>
-              body { font-family: Arial, sans-serif; padding: 24px; color: #1f2937; }
-              .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; max-width: 720px; margin: 0 auto; }
-              .title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-              .sub { color: #6b7280; margin-bottom: 20px; }
-              .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
-              .row { margin-bottom: 8px; }
-              .label { font-weight: 700; }
-              .qr { margin-top: 16px; text-align: center; }
+              @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+              body { 
+                font-family: 'Space Mono', monospace; 
+                padding: 20px; 
+                color: #000; 
+                width: 300px; 
+                margin: 0 auto; 
+              }
+              .header { text-align: center; margin-bottom: 20px; }
+              .logo { font-size: 24px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+              .sub { font-size: 12px; color: #444; }
+              .divider { border-top: 1px dashed #000; margin: 15px 0; }
+              .row { display: flex; justify-content: space-between; font-size: 14px; margin: 8px 0; }
+              .big-ticket { font-size: 32px; font-weight: bold; text-align: center; margin: 15px 0; }
+              .qr { margin-top: 20px; text-align: center; }
+              img { width: 120px; height: 120px; display: block; margin: 0 auto; }
+              .footer { text-align: center; font-size: 12px; margin-top: 20px; color: #555; }
             </style>
           </head>
           <body>
-            ${ticketElement.innerHTML}
+            <div class="header">
+              <div class="logo">Smart Dining</div>
+              <div class="sub">Premium Restaurant Experience</div>
+              <div class="sub">123 Culinary Hub, Colombo</div>
+            </div>
+            <div class="divider"></div>
+            <div style="text-align: center; font-size: 14px; margin-bottom: 5px;">VIRTUAL QUEUE TICKET</div>
+            <div class="big-ticket">#${queueResult.ticketNumber}</div>
+            <div class="divider"></div>
+            <div class="row"><span>Name:</span><span>${queueResult.customerName || 'N/A'}</span></div>
+            <div class="row"><span>Phone:</span><span>${queueResult.customerPhone || 'N/A'}</span></div>
+            <div class="row"><span>Party Size:</span><span>${queueResult.guestCount || 'N/A'}</span></div>
+            <div class="row"><span>Time:</span><span>${queueResult.joinedAt || 'N/A'}</span></div>
+            <div class="divider"></div>
+            <div class="row"><span>Wait Position:</span><span>${queueResult.position}</span></div>
+            <div class="row"><span>Est. Wait:</span><span>${queueResult.estimatedWait} min</span></div>
+            <div class="divider"></div>
+            <div class="qr">
+              <img src="${document.querySelector('canvas')?.toDataURL() || ''}" alt="QR Code" />
+            </div>
+            <div class="footer">
+              Keep this ticket safe.<br/>
+              Please present when called.<br/>
+              Track status in the queue page.
+            </div>
           </body>
         </html>
       `);
       printWindow.document.close();
       printWindow.focus();
-      printWindow.print();
-      printWindow.close();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 250);
     };
 
     const handleDownloadTicketPdf = async () => {
-      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-      let y = 50;
+      const doc = new jsPDF({ unit: 'mm', format: [80, 160] });
+      const width = doc.internal.pageSize.getWidth();
+      let y = 15;
 
-      doc.setFontSize(24);
-      doc.text('Queue Joined Receipt', 40, y);
-      y += 26;
-      doc.setFontSize(12);
-      doc.text('Please present this receipt when called.', 40, y);
-      y += 24;
+      const centerText = (text: string, yPos: number, size = 10, isBold = false) => {
+        doc.setFontSize(size);
+        doc.setFont('courier', isBold ? 'bold' : 'normal');
+        const textWidth = doc.getStringUnitWidth(text) * size / doc.internal.scaleFactor;
+        doc.text(text, (width - textWidth) / 2, yPos);
+      };
 
-      doc.setFontSize(14);
-      doc.text(`Ticket Number: #${queueResult.ticketNumber}`, 40, y);
-      y += 22;
-      doc.text(`Position: ${queueResult.position}`, 40, y);
-      y += 22;
-      doc.text(`Estimated Wait: ${queueResult.estimatedWait} min`, 40, y);
-      y += 22;
-      doc.text(`Name: ${queueResult.customerName || 'N/A'}`, 40, y);
-      y += 22;
-      doc.text(`Phone: ${queueResult.customerPhone || 'N/A'}`, 40, y);
-      y += 22;
-      doc.text(`Guests: ${queueResult.guestCount || 'N/A'}`, 40, y);
-      y += 22;
-      doc.text(`Joined At: ${queueResult.joinedAt || 'N/A'}`, 40, y);
+      centerText('SMART DINING', y, 16, true);
+      y += 6;
+      centerText('Premium Restaurant Experience', y, 8);
+      y += 4;
+      centerText('123 Culinary Hub, Colombo', y, 8);
+
+      y += 8;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 8;
+
+      centerText('VIRTUAL QUEUE TICKET', y, 10, true);
+      y += 12;
+      centerText(`#${queueResult.ticketNumber}`, y, 24, true);
+      y += 10;
+
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 8;
+
+      doc.setFontSize(9);
+      doc.setFont('courier', 'normal');
+      doc.text('Name:', 5, y);
+      doc.text(queueResult.customerName || 'N/A', width - 5, y, { align: 'right' });
+      y += 6;
+      doc.text('Phone:', 5, y);
+      doc.text(queueResult.customerPhone || 'N/A', width - 5, y, { align: 'right' });
+      y += 6;
+      doc.text('Party:', 5, y);
+      doc.text(queueResult.guestCount ? `${queueResult.guestCount} Guests` : 'N/A', width - 5, y, { align: 'right' });
+      y += 6;
+      doc.text('Time:', 5, y);
+      doc.text(queueResult.joinedAt || 'N/A', width - 5, y, { align: 'right' });
+
+      y += 8;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 8;
+
+      doc.setFont('courier', 'bold');
+      doc.text('Wait Pos:', 5, y);
+      doc.text(queueResult.position?.toString() || '0', width - 5, y, { align: 'right' });
+      y += 6;
+      doc.text('Est. Wait:', 5, y);
+      doc.text(`${queueResult.estimatedWait} min`, width - 5, y, { align: 'right' });
+
+      y += 8;
+      doc.setLineDashPattern([1, 1], 0);
+      doc.line(5, y, width - 5, y);
+      y += 10;
 
       const qrValue = `QUEUE:${queueResult.ticketNumber}`;
-      const qrDataUrl = await QRCode.toDataURL(qrValue, { width: 180, margin: 1 });
-      doc.addImage(qrDataUrl, 'PNG', 390, 120, 150, 150);
+      try {
+        const qrDataUrl = await QRCode.toDataURL(qrValue, { width: 100, margin: 1 });
+        doc.addImage(qrDataUrl, 'PNG', (width - 40) / 2, y, 40, 40);
+        y += 45;
+      } catch (err) { }
 
-      doc.setDrawColor(200);
-      doc.line(40, y + 16, 555, y + 16);
-      y += 42;
-      doc.setFontSize(11);
-      doc.text('Keep this ticket number safe and track status in the queue page.', 40, y);
+      centerText('Please present this ticket', y, 8);
+      y += 4;
+      centerText('when called. Thank you!', y, 8);
 
       doc.save(`Queue_Ticket_${queueResult.ticketNumber}.pdf`);
     };
