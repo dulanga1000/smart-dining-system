@@ -32,7 +32,7 @@ export default function LuxuryRestaurantPage() {
     <div className="min-h-screen bg-luxury-ivory">
       <LuxuryNav />
 
-      <section className="relative h-[60vh] flex items-end overflow-hidden mt-20">
+      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden mt-20">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80"
@@ -41,7 +41,7 @@ export default function LuxuryRestaurantPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/30"></div>
         </div>
-        <div className="relative z-10 container mx-auto px-8 pb-16">
+        <div className="relative z-10 container mx-auto px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export default function LuxuryRestaurantPage() {
           >
             <p className="text-luxury-gold text-sm tracking-[0.3em] uppercase mb-4">Our Story</p>
             <h1 className="font-serif text-6xl md:text-7xl text-white mb-6">Queen Nature Resort</h1>
-            <div className="flex items-center gap-6 text-white/90">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-white/90">
               <div className="flex items-center gap-2">
                 <Star className="w-6 h-6 text-luxury-gold fill-luxury-gold" />
                 <span className="font-light">4.9/5 Rating</span>
